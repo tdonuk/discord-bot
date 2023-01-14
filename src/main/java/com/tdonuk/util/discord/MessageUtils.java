@@ -36,13 +36,24 @@ public final class MessageUtils extends BaseUtils {
     /**
      * Writes the given data in a list format
      */
-    public static String list(Map<String, String> data) {
-        StringBuilder list = new StringBuilder();
+    public static String list(String header, Map<String, String> data) {
+        StringBuilder list = new StringBuilder(header+"\n\t");
 
         int row = 0;
         for(String key : data.keySet()) {
             list.append(String.format("%d - %s", ++row, italic_bold(key)));
-            list.append("\n\t").append(data.get(key));
+            list.append("\n\t").append(data.get(key)).append("\n\t");
+        }
+
+        return list.toString();
+    }
+
+    public static String singleRowList(String header, Map<String, String> data) {
+        StringBuilder list = new StringBuilder(header+"\n");
+
+        int row = 0;
+        for(String key : data.keySet()) {
+            list.append(String.format("%d - %s (%s)\n", ++row, italic_bold(key), italic(data.get(key))));
         }
 
         return list.toString();

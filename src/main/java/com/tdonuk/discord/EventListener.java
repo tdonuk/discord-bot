@@ -1,5 +1,7 @@
 package com.tdonuk.discord;
 
+import com.tdonuk.constant.Globals;
+import com.tdonuk.util.discord.MessageUtils;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -41,24 +43,29 @@ public class EventListener extends ListenerAdapter {
             return;
         }
 
-        if(event.getChannelType().equals(ChannelType.PRIVATE)) {
+        if(event.getChannelType().equals(ChannelType.PRIVATE) && !event.getAuthor().getName().contains("Taha Dönük")) {
             logger.info(event.getAuthor().getName()+": " + event.getMessage().getContentDisplay());
             event.getMessage().reply("Sorry, i'm not created to chat with a human. I have neither intelligence nor consciousness.").queue();
             return;
         }
 
-        logger.info(Objects.requireNonNull(event.getMember()).getEffectiveName()+": " + event.getMessage().getContentDisplay());
+        logger.info(event.getAuthor().getName()+": " + event.getMessage().getContentDisplay());
 
         String message = event.getMessage().getContentDisplay();
 
         if(!message.startsWith("!")) return;
 
-        COMMAND command = COMMAND.valueOf(message.substring(0,2)); // (!n blabla..) -> 0: !, 1: n
+        if(message.equals("!help") || message.equals("!example")) {
+            event.getMessage().reply(MessageUtils.list("Here is an example of usage", Globals.mobalyticsTutorials));
+        }
+
+        COMMAND command = COMMAND.byName(message.substring(0,message.indexOf(" "))); // (!n command) -> 0: !, 1: n
 
         try {
             command.getExecutor().execute(event);
         } catch (Exception e) {
             logger.warning(e.getMessage());
+            event.getMessage().reply(MessageUtils.italic("Sorry, a problem has occurred while searching for the web. Biip-bop.")).queue();
         }
 
         logger.exiting(this.getClass().getName(), "onMessageReceived");

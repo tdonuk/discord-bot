@@ -14,8 +14,7 @@ import java.util.logging.Logger;
  * Fetch news from NewsAPI and return in a format of list to the channel that bot is being called
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class NewsAPIExecutor implements MessageExecutor<NewsResponseDTO>{
-    private final Logger logger = Logger.getGlobal();
+public final class NewsAPIExecutor extends AbstractMessageExecutor {
     private static NewsAPIExecutor executor;
 
     public static NewsAPIExecutor instance() {
@@ -25,7 +24,7 @@ public final class NewsAPIExecutor implements MessageExecutor<NewsResponseDTO>{
     }
 
     @Override
-    public NewsResponseDTO execute(GenericEvent event) throws Exception {
+    public void execute(GenericEvent event) throws Exception {
         logger.entering(this.getClass().getName(), "execute", event);
 
         MessageReceivedEvent messageEvent = (event instanceof MessageReceivedEvent) ? (MessageReceivedEvent) event : null; // currently not supporting event other than message
@@ -37,7 +36,5 @@ public final class NewsAPIExecutor implements MessageExecutor<NewsResponseDTO>{
         // TODO: do some business with received message..
 
         logger.exiting("NewsAPIExecutor", "execute");
-
-        return null;
     }
 }
