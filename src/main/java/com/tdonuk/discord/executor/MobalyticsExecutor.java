@@ -44,14 +44,15 @@ public final class MobalyticsExecutor extends AbstractMessageExecutor {
         COMMAND command = COMMAND.byName(message.substring(0,message.indexOf(" ")));
 
         switch(command) {
-            case CT -> {
-                String[] query = message.substring(command.getName().length()+1).split(" ");
+            case CT -> { // !ct jungle kha zix
+                String[] query = message.substring(command.getName().length()+1).split(" "); // jungle | kha zix
                 ROLE role = ROLE.valueOf(query[0].toUpperCase());
-                String champ = query[1];
+                String champ = message.substring(message.indexOf(" ", message.indexOf(role.getName()))).replaceAll(" ", "");
 
                 List<Counter> counters = getCounters(role, champ);
 
                 Map<String, String> countersMap = new HashMap<>();
+                Collections.sort(counters, Comparator.comparingDouble(c -> Double.valueOf(c.getPercent().replaceAll("[^0-9.]", ""))));
                 counters.forEach(c -> countersMap.put(c.getChamp(), c.getPercent() + " win rate"));
 
                 messageEvent.getMessage().reply(MessageUtils.singleRowList(String.format("Here is the counters of the %s", MessageUtils.italic_bold(role.getName() + " " + champ)), countersMap)).queue();

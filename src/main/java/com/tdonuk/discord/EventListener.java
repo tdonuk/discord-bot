@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.events.session.ReadyEvent;
 import net.dv8tion.jda.api.events.user.UserTypingEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -53,10 +54,16 @@ public class EventListener extends ListenerAdapter {
 
         String message = event.getMessage().getContentDisplay();
 
+        if(Arrays.asList("nabarsın","nabarsınız", "nabonuz", "!nabarsın", "!nabarsınız","!nabonuz").contains(message)) {
+            event.getMessage().reply("Seni").queue();
+            return;
+        }
+
         if(!message.startsWith("!")) return;
 
         if(message.equals("!help") || message.equals("!example")) {
             event.getMessage().reply(MessageUtils.list("Here is an example of usage", Globals.mobalyticsTutorials));
+            return;
         }
 
         COMMAND command = COMMAND.byName(message.substring(0,message.indexOf(" "))); // (!n command) -> 0: !, 1: n
