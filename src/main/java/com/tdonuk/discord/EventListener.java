@@ -61,9 +61,8 @@ public class EventListener extends ListenerAdapter {
             return;
         }
 
-        COMMAND command = COMMAND.byName(message.substring(0,message.indexOf(" "))); // (!n command) -> 0: !, 1: n
-
         try {
+            COMMAND command = COMMAND.byName(message.substring(0,message.indexOf(" "))); // (!n command) -> 0: !, 1: n
             command.getExecutor().execute(event);
         } catch (Exception e) {
             logger.warning(e.getMessage());

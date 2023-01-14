@@ -1,7 +1,7 @@
 package com.tdonuk.constant.lol;
 
 public enum ROLE {
-    TOP("top"), JUNGLE("jungle"), MID("mid"), BOT("bot"), SUPP("support");
+    TOP("top"), JUNGLE("jungle"), MID("mid"), BOT("bot"), SUPP("supp");
 
     private final String name;
 
