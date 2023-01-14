@@ -54,11 +54,6 @@ public class EventListener extends ListenerAdapter {
 
         String message = event.getMessage().getContentDisplay();
 
-        if(Arrays.asList("nabarsın","nabarsınız", "nabonuz", "!nabarsın", "!nabarsınız","!nabonuz").contains(message)) {
-            event.getMessage().reply("Seni").queue();
-            return;
-        }
-
         if(!message.startsWith("!")) return;
 
         if(message.equals("!help") || message.equals("!example")) {
