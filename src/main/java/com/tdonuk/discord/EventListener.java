@@ -57,7 +57,7 @@ public class EventListener extends ListenerAdapter {
         if(!message.startsWith("!")) return;
 
         if(message.equals("!help") || message.equals("!example")) {
-            event.getMessage().reply(MessageUtils.list("Here is an example of usage", Globals.mobalyticsTutorials));
+            event.getMessage().reply(MessageUtils.list("Here is an example of usage", Globals.mobalyticsTutorials)).queue();
             return;
         }
 
