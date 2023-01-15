@@ -1,11 +1,11 @@
-package com.tdonuk.http.dto;
+package com.tdonuk.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class Counter {
+public class CounterDTO {
     private String champ;
     private String percent;
 

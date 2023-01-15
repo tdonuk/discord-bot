@@ -1,4 +1,4 @@
-package com.tdonuk.http.dto;
+package com.tdonuk.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

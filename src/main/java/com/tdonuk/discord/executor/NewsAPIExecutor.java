@@ -1,6 +1,5 @@
 package com.tdonuk.discord.executor;
 
-import com.tdonuk.http.dto.NewsResponseDTO;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.dv8tion.jda.api.events.GenericEvent;
@@ -8,7 +7,6 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.naming.OperationNotSupportedException;
 import java.util.Objects;
-import java.util.logging.Logger;
 
 /**
  * Fetch news from NewsAPI and return in a format of list to the channel that bot is being called

@@ -1,7 +1,7 @@
 package com.tdonuk.http;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tdonuk.http.dto.ResponseDTO;
+import com.tdonuk.dto.ResponseDTO;
 import com.tdonuk.util.HttpUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

@@ -3,14 +3,13 @@ package com.tdonuk.discord.executor;
 import com.tdonuk.config.MobalyticsConfig;
 import com.tdonuk.constant.lol.ROLE;
 import com.tdonuk.discord.COMMAND;
-import com.tdonuk.http.dto.Counter;
+import com.tdonuk.dto.CounterDTO;
 import com.tdonuk.util.discord.MessageUtils;
 import com.tdonuk.util.web.WebUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import org.jsoup.internal.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
@@ -49,7 +48,7 @@ public final class MobalyticsExecutor extends AbstractMessageExecutor {
                 ROLE role = ROLE.valueOf(query[0].toUpperCase());
                 String champ = message.substring(message.indexOf(" ", message.indexOf(role.getName()))).replaceAll(" ", "");
 
-                List<Counter> counters = getCounters(role, champ);
+                List<CounterDTO> counters = getCounters(role, champ);
 
                 Map<String, String> countersMap = new HashMap<>();
                 Collections.sort(counters, Comparator.comparingDouble(c -> Double.valueOf(c.getPercent().replaceAll("[^0-9.]", ""))));
@@ -65,20 +64,20 @@ public final class MobalyticsExecutor extends AbstractMessageExecutor {
         logger.exiting("NewsAPIExecutor", "execute");
     }
 
-    private List<Counter> getCounters(ROLE role, String champ) throws IOException {
+    private List<CounterDTO> getCounters(ROLE role, String champ) throws IOException {
         String url = MobalyticsConfig.COUNTERS_PATH.replaceAll("%ROLE%", role.getName()).replaceAll("%CHAMP%", champ.toLowerCase());
 
         Document mobalytics = WebUtils.getDocument(url);
         Elements rows = WebUtils.get("div[class='m-1p8lnhy']", mobalytics);
 
-        List<Counter> counters = new ArrayList<>();
+        List<CounterDTO> counters = new ArrayList<>();
 
         rows.stream().forEach(row -> {
             try {
                 String champName = row.selectFirst("p[class='m-6j974']").ownText();
                 String percent = row.selectFirst("div[class='m-oft0zz'] span").ownText();
 
-                if(!champName.toLowerCase().contains("overall")) counters.add(new Counter(champName, percent));
+                if(!champName.toLowerCase().contains("overall")) counters.add(new CounterDTO(champName, percent));
             } catch (Exception e) {
 
             }
