@@ -45,12 +45,14 @@ public final class MessageUtils extends BaseUtils {
         int row = 0;
         int length;
         for(String key : data.keySet()) {
+            row++;
+
             length = key.length() + data.get(key).length();
             if(list.length() + length > JDAConfig.MAX_MESSAGE_LENGTH) break;
 
             String value = data.get(key);
 
-            list.append(String.format("%d - %s\n%s\n", ++row, key, value));
+            list.append(String.format("%s\n%s\n", key, value));
 
             if(!StringUtil.isBlank(value)) list.append("\n"); // som prettifying
         }
