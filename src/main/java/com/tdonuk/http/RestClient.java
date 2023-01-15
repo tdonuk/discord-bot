@@ -1,5 +1,6 @@
 package com.tdonuk.http;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tdonuk.dto.ResponseDTO;
 import com.tdonuk.util.HttpUtils;
@@ -19,6 +20,8 @@ public final class RestClient {
 
     public static <T> ResponseDTO<T> exchange(String url, String method, Object body, Map<String, String> headers, Map<String,String> params, Class<T> clazz) throws Exception {
         HttpRequest request = HttpUtils.createRequest(url, params, headers, body, method.toUpperCase());
+
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 

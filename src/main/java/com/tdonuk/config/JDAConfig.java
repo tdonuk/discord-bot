@@ -8,8 +8,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class JDAConfig extends App {
-    public static String JDA_API_KEY = "PROTECTED";
+    public static String JDA_API_KEY = "[PROTECTED]";
     public static final List<GatewayIntent> INTENTS = Arrays.asList(GatewayIntent.MESSAGE_CONTENT);
     public static final Activity ACTIVITY = Activity.competing("Hello World");
     public static final OnlineStatus ONLINE_STATUS = OnlineStatus.IDLE;
+
+    public static final int MAX_MESSAGE_LENGTH = 2000;
 }

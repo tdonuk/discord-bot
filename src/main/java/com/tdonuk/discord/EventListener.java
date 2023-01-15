@@ -1,6 +1,7 @@
 package com.tdonuk.discord;
 
 import com.tdonuk.constant.Globals;
+import com.tdonuk.util.app.CommandUtils;
 import com.tdonuk.util.discord.MessageUtils;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
@@ -56,14 +57,9 @@ public class EventListener extends ListenerAdapter {
 
         if(!message.startsWith("!")) return;
 
-        if(message.equals("!help") || message.equals("!example")) {
-            event.getMessage().reply(MessageUtils.list("Here is an example of usage", Globals.mobalyticsTutorials)).queue();
-            return;
-        }
 
         try {
-            COMMAND command = COMMAND.byName(message.substring(0,message.indexOf(" "))); // (!n command) -> 0: !, 1: n
-            command.getExecutor().execute(event);
+            CommandUtils.parseCommand(message).getExecutor().execute(event);
         } catch (Exception e) {
             logger.warning(e.getMessage());
             event.getMessage().reply(MessageUtils.italic("Sorry, a problem has occurred while searching for the web. Biip-bop.")).queue();

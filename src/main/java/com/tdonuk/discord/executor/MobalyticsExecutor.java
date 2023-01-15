@@ -1,6 +1,7 @@
 package com.tdonuk.discord.executor;
 
 import com.tdonuk.config.MobalyticsConfig;
+import com.tdonuk.constant.Globals;
 import com.tdonuk.constant.lol.ROLE;
 import com.tdonuk.discord.COMMAND;
 import com.tdonuk.dto.CounterDTO;
@@ -16,6 +17,7 @@ import org.jsoup.select.Elements;
 import javax.naming.OperationNotSupportedException;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Fetch data from mobalytics like CT's of a champion, synergies, builds etc..
@@ -42,22 +44,28 @@ public final class MobalyticsExecutor extends AbstractMessageExecutor {
 
         COMMAND command = COMMAND.byName(message.substring(0,message.indexOf(" ")));
 
+        String commandText = message.replace(command.getName(), "").trim();
+
         switch(command) {
             case CT -> { // !ct jungle kha zix
-                String[] query = message.substring(command.getName().length()+1).split(" "); // jungle | kha zix
-                ROLE role = ROLE.valueOf(query[0].toUpperCase());
-                String champ = message.substring(message.indexOf(" ", message.indexOf(role.getName()))).replaceAll(" ", "");
+                if(Globals.HELP.equals(commandText) || Globals.EXAMPLE.equals(commandText)) {
+                    messageEvent.getMessage().reply("Here is a tutorial\n" + MessageUtils.list(Globals.mobalyticsTutorial) + "\n").queue();
+                    return;
+                }
+
+                ROLE role = ROLE.valueOf(commandText.substring(0, commandText.indexOf(" ")).toUpperCase());
+                String champ = commandText.replace(role.getName(), "").trim();
 
                 List<CounterDTO> counters = getCounters(role, champ);
 
                 Map<String, String> countersMap = new HashMap<>();
-                Collections.sort(counters, Comparator.comparingDouble(c -> Double.valueOf(c.getPercent().replaceAll("[^0-9.]", ""))));
-                counters.forEach(c -> countersMap.put(c.getChamp(), c.getPercent() + " win rate"));
+                counters.forEach(c -> countersMap.put(MessageUtils.italic_bold(c.getChamp()) + " (" + MessageUtils.italic(c.getPercent()+ " win rate)"), ""));
 
-                messageEvent.getMessage().reply(MessageUtils.singleRowList(String.format("Here is the counters of the %s", MessageUtils.italic_bold(role.getName() + " " + champ)), countersMap)).queue();
-            }
-            case SY -> {
-                throw new OperationNotSupportedException("This feature is not supported currently");
+                StringBuilder counterList = new StringBuilder(String.format("Here is the counters of the %s", MessageUtils.italic_bold(role.getName() + " " + champ)));
+                counterList.append("\n\n").append(MessageUtils.list(countersMap));
+                counterList.append(MessageUtils.italic("source: app.mobalytics.gg"));
+
+                messageEvent.getMessage().reply(counterList.toString()).queue();
             }
         }
 
@@ -65,7 +73,7 @@ public final class MobalyticsExecutor extends AbstractMessageExecutor {
     }
 
     private List<CounterDTO> getCounters(ROLE role, String champ) throws IOException {
-        String url = MobalyticsConfig.COUNTERS_PATH.replaceAll("%ROLE%", role.getName()).replaceAll("%CHAMP%", champ.toLowerCase());
+        String url = MobalyticsConfig.COUNTERS_PATH.replaceAll("%ROLE%", role.getName()).replaceAll("%CHAMP%", champ.replaceAll(" ", "").toLowerCase());
 
         Document mobalytics = WebUtils.getDocument(url);
         Elements rows = WebUtils.get("div[class='m-1p8lnhy']", mobalytics);

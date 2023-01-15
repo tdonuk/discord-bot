@@ -16,7 +16,7 @@ public class BaseUtils {
     public static String[] mapToArray(final Map<String, String> map) {
         logger.entering(BaseUtils.class.getName(), "mapToArray", map);
 
-        if(MapUtils.isEmpty(map)) return new String[0];
+        if(MapUtils.isEmpty(map)) return new String[]{"empty", "header"};
 
         String[] httpHeaders = new String[map.size() * 2];
 

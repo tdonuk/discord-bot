@@ -1,11 +1,12 @@
 package com.tdonuk.discord;
 
+import com.tdonuk.discord.executor.HelpExecutor;
 import com.tdonuk.discord.executor.MessageExecutor;
 import com.tdonuk.discord.executor.MobalyticsExecutor;
 import com.tdonuk.discord.executor.NewsAPIExecutor;
 
 public enum COMMAND {
-    NEWS("!n", NewsAPIExecutor.instance()), CT("!ct", MobalyticsExecutor.instance()), SY("!sy", MobalyticsExecutor.instance());
+    NEWS("!news", NewsAPIExecutor.instance()), CT("!ct", MobalyticsExecutor.instance()), HELP("!help", HelpExecutor.instance());
 
     private final String name;
     private final MessageExecutor executor;

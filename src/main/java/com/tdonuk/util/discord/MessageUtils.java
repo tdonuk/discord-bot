@@ -1,6 +1,9 @@
 package com.tdonuk.util.discord;
 
+import com.tdonuk.config.JDAConfig;
+import com.tdonuk.constant.Globals;
 import com.tdonuk.util.BaseUtils;
+import org.jsoup.internal.StringUtil;
 
 import java.util.Map;
 
@@ -36,13 +39,20 @@ public final class MessageUtils extends BaseUtils {
     /**
      * Writes the given data in a list format
      */
-    public static String list(String header, Map<String, String> data) {
-        StringBuilder list = new StringBuilder(header+"\n");
+    public static String list(Map<String, String> data) {
+        StringBuilder list = new StringBuilder();
 
         int row = 0;
+        int length;
         for(String key : data.keySet()) {
-            list.append(String.format("%d - %s", ++row, italic_bold(key)));
-            list.append("\n\t").append(data.get(key)).append("\n");
+            length = key.length() + data.get(key).length();
+            if(list.length() + length > JDAConfig.MAX_MESSAGE_LENGTH) break;
+
+            String value = data.get(key);
+
+            list.append(String.format("%d - %s\n%s\n", ++row, key, value));
+
+            if(!StringUtil.isBlank(value)) list.append("\n"); // som prettifying
         }
 
         return list.toString();
