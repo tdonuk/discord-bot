@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    private final String NEWS_API_KEY = "pub_15637b1b5eb4e9edd817b89e5dd2f3609abdb";
+    private final String NEWS_API_KEY = "[PROTECTED]";
     public static void main(String[] args) throws InterruptedException {
         AppUtils.init();
 
