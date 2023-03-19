@@ -48,7 +48,7 @@ public final class MessageUtils extends BaseUtils {
             row++;
 
             length = key.length() + data.get(key).length();
-            if(list.length() + length > JDAConfig.MAX_MESSAGE_LENGTH) break;
+            if(list.length() + length > JDAConfig.MAX_MESSAGE_LENGTH-100) break;
 
             String value = data.get(key);
 
